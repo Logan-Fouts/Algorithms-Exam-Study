@@ -1,4 +1,4 @@
-# README for Algorithm Exam Study Repository
+# Algorithm Exam Study Repository
 
 This repository contains a collection of algorithm implementations, study materials for exams, and notes from lectures. It is organized into several directories.
 
