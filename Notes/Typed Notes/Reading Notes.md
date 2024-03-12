@@ -69,3 +69,35 @@
 	- When we say that T(N) = O(f(N)), we are guaranteeing that the function T(N) grows at a rate no faster than f(N); thus f(N) is an upper bound on T(N). Since this implies that $f(N) = Ω(T(N))$, we say that T(N) is a lower bound on f(N). 
 	- As an example, $N^3$ grows faster than $N^2$ , so we can say that $N^2 = O(N^3 )$ $or $N^3 = Ω(N^2)$
 - ![[Pasted image 20240227194423.png]]
+# Chapter 3 (Lists, Stacks, Queues)
+## Abstract Data Types (ADTs)
+- Defines a set of operations without specifying their implementation.
+- Lists, sets, and graphs can be viewed as ADTs.
+- Key operations for a set ADT might include add, remove, and contains.
+
+## Lists
+- **Introduction to Lists**: Conceptual foundation of linear arrangements of elements.
+- **Implementations**: 
+  - **Array-based lists**: Fixed-size and dynamic resizing strategies, advantages, and limitations.
+  - **Linked lists**: Singly linked lists, doubly linked lists, and circular linked lists with their operations (insertion, deletion, traversal).
+- **Java Collections Framework (JCF)**: Overview of the List interface and its implementations in Java (`ArrayList`, `LinkedList`).
+- **Applications**: Use cases in software development, such as managing ordered collections of objects.
+
+## Stacks
+- **Concept and Properties**: LIFO (Last-In-First-Out) principle for element access.
+- **Implementations**:
+  - **Array-based stacks**: Managing stack operations with arrays, handling capacity issues.
+  - **Linked-list stacks**: Using nodes for flexible stack management without size limitations.
+- **Key Operations**: `push()`, `pop()`, `peek()`, and utility methods like `isEmpty()`.
+- **Applications**: Expression evaluation, backtracking algorithms, function call management in programming languages.
+
+## Queues
+- **Concept and Properties**: FIFO (First-In-First-Out) principle for element processing.
+- **Implementations**:
+  - **Array-based queues**: Circular queue design to efficiently use array space.
+  - **Linked-list queues**: Nodes to flexibly manage queue elements.
+- **Key Operations**: `enqueue()`, `dequeue()`, `front()`, and `isEmpty()`.
+- **Specialized Queues**:
+  - **Priority Queues**: Managing elements based on priority rather than insertion order.
+  - **Dequeues (Double-Ended Queues)**: Allowing insertion and deletion at both ends.
+- **Applications**: Scheduling, buffering, and resource management in computing systems.

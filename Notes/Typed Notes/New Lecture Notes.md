@@ -60,7 +60,7 @@ O(n)
 - Same root = same component.
 - When adding an object to a component, its root is connected to the root of the other component.
 - Example: 
-  - !\[\[Pasted image 20240221161447.png\]\] Three Main methods:
+  - ![[Pasted image 20240221161447.png]] Three Main methods:
 - Root...
 
 ```python
@@ -163,7 +163,7 @@ Cant really say average time complexity
 - Make trees flatter but wider.
 - While we are looking for the root drag sub-trees up and attach them to the root.
 - Example: 
-  - !\[\[Pasted image 20240221170018.png\]\] Three Main methods:
+  - ![[Pasted image 20240221170018.png]] Three Main methods:
 - Root...
 
 ```python
@@ -573,3 +573,489 @@ plt.show()
 - We sometimes can find a tighter bound if analysis is an overestimation
 - In some cases average case analysis if very complex
 - The worst case bound is the bets analytical result known
+## Lecture 3 (Lists, Stacks, and Queues) Ch. 3
+### Abstract Data Type (ADT)
+- An abstract data type defines a class of abstract objects which is completely characterized by the operations available on those objects. This means that an abstract data type can be defined by defining the characterizing operations for that type. […] Implementation information, such as how the object is represented in storage, is only needed when defining how the characterizing operations are to be implemented. The user of the object is not required to know or supply this information.
+- An ADT is a theoretical (mathematical) model
+- It defines the behavior of a data type, not its implementation
+	- The type is completely opaque from outside of its operations
+- The behavior is defined from the user's perspective, i.e., as a set of operations.
+
+- A data type consists of a set of values or elements/the domain
+	- If finite, this can be specified via enumeration
+	- If not, via some rule describing the elements
+- and a set of operations
+	- Syntax, names and values
+	- Semantics, functionality/behavior
+- Example
+	- Integer can be considered an abstract data type
+		- The domain is $ℤ$ (the integers)
+	- The operations include
+		- +,-,*,/
+		- =,!=,<,>
+#### Semantics
+- Semantics can be specified in a few different ways
+	- Text, Algebraic specification, or Operational specification
+- Example: Algebraic specification
+	- ![[Pasted image 20240312115249.png]]
+#### Abstract vs Concrete (DT)
+- An ADT is a model, not an implementation
+- It is a theoretical tool, not a language construct
+- The model can be implemented in multiple ways
+	- Sometimes with restrictions
+		- This can be such as numpy vector implementation will overflow for large enough numbers
+### Lists
+- A List is a finite, ordered sequence of elements (ordered meaning each element has a position not that its sorted necessarily)
+#### Simple List (Array/memory based)
+- We can create a simple list by simulating memory that we can use to store the list
+```python
+class SimpleList():
+	def __init__(self) -> None:
+		self.lst = np.empty(10, dtype=np.int64)
+		self.cnt = 0
+	def append(self:SimpleList, d:int) -> None:
+		self.lst[self.cnt] = d
+		self.cnt += 1
+```
+#### Free List
+- When we delete from this simple list we would have to move everything after the deletion left so avoid holes.
+- If we want to avoid this we can try to hold a free list which is just a list that contains true or false for each position to say if its free. But now to append we must iterate over the list to find a free spot.
+#### Increase Length
+- When we go out of the current size we can increase the size. Typically doing this by 1 is bad since we need to copy over the original list every time. So, maybe double the list length when the size limit is reached.
+#### Simple Single Linked List
+```run-python
+from dataclasses import dataclass
+
+@dataclass
+class LLNode:
+    val: int
+    nxt: 'LLNode | None' = None
+
+class LinkedList:
+    def __init__(self) -> None:
+        self.lst = None
+        
+    def append(self, d: int) -> None:
+	    # O(n)
+        if self.lst is None:
+            self.lst = LLNode(d)
+        else:
+            p = self.lst
+            while p.nxt is not None:
+                p = p.nxt
+            p.nxt = LLNode(d)
+
+    def delete(self, d: int) -> None:
+	    # O(n)
+        if self.lst is not None:
+            if self.lst.val == d:
+                if self.lst.nxt is None:
+                    self.lst = None
+                else:
+                    self.lst = self.lst.nxt
+            else:
+                p = self.lst
+                while p.nxt is not None and p.nxt.val != d:
+                    p = p.nxt
+                if p.nxt is not None:
+                    p.nxt = p.nxt.nxt
+    def print_list(self) -> None:
+	    if self.lst is None:
+	        print("LinkedList is empty")
+	    else:
+	        p = self.lst
+	        while p is not None:
+	            print(p.val, end=" -> ")
+	            p = p.nxt
+	        print("None")
+
+
+ll = LinkedList()
+ll.print_list()
+ll.append(1)
+ll.append(2)
+ll.print_list()
+ll.delete(1)
+ll.print_list()
+ll.delete(2)
+ll.print_list()
+```
+- We run into performance problems since we traverse the list to append or delete items.
+- To try and solve this we can keep track of the last item.
+#### Linked List With Last Tracker
+```run-python
+from dataclasses import dataclass
+
+@dataclass
+class LLNode:
+    val: int
+    nxt: 'LLNode | None' = None
+
+class LinkedList:
+    def __init__(self) -> None:
+        self.lst = None
+        self.last = None
+        
+    def append(self, d: int) -> None:
+        # O(1)
+        if self.lst is None:
+            self.lst = LLNode(d)
+            self.last = self.lst
+        else:
+            self.last.nxt = LLNode(d)
+            self.last = self.last.nxt
+
+    def delete(self, d: int) -> None:
+        # O(n)
+        if self.lst is not None:
+            if self.lst.val == d:
+                if self.lst.nxt is None:
+                    self.lst = None
+                    self.last = None
+                else:
+                    self.lst = self.lst.nxt
+            else:
+                p = self.lst
+                while p.nxt is not None and p.nxt.val != d:
+                    p = p.nxt
+                if p.nxt is not None:
+                    p.nxt = p.nxt.nxt
+                    if p.nxt is None:
+                        self.last = p
+
+    def print_list(self) -> None:
+        if self.lst is None:
+            print("LinkedList is empty")
+        else:
+            p = self.lst
+            while p is not None:
+                print(p.val, end=" -> ")
+                p = p.nxt
+            print("None")
+
+
+ll = LinkedList()
+ll.print_list()
+ll.append(1)
+ll.append(2)
+ll.print_list()
+```
+### Stacks
+- A stack is an ADT where values are inserted and removed from the "top"
+- LIFO (Last In, First Out)
+- Two main operations push and pop (insert and remove)
+- Useful for handling function calls in programs
+#### Stack using linked list
+- The main operations are defined as such...
+```python
+__init__ (newstack)
+push(v:int) -> None
+pop() -> None
+top() -> int|None
+empty() -> bool
+```
+
+```run-python
+from dataclasses import dataclass
+
+@dataclass
+class LLNode:
+    val: int
+    nxt: 'LLNode | None' = None
+
+class LLStack:
+    def __init__(self) -> None:
+        self.stack = None
+    
+    def empty(self) -> bool:
+        return self.stack is None
+    
+    def top(self) -> 'int | None':
+        if self.stack is None:
+            return None
+        else:
+            return self.stack.val
+    
+    def push(self, v: int) -> None:
+        tmp = LLNode(v)
+        tmp.nxt = self.stack
+        self.stack = tmp
+    
+    def pop(self) -> None:
+        if self.stack is not None:
+            self.stack = self.stack.nxt
+
+stack = LLStack()
+assert stack.empty() == True
+
+stack.push(1)
+assert stack.empty() == False
+assert stack.top() == 1
+
+stack.pop()
+assert stack.empty() == True
+
+print("All tests pass")
+```
+
+### Queues
+- A queue is an ADT where values are inserted and removed from each end. (Like a waiting line in the real world)
+- FIFO (First In, First Out)
+- Two main operations enqueue and dequeue (insert and remove)
+- Useful for:
+	- multiple requests, network traffic, processes in an OS.
+#### Queue using array
+- This suffers from the same issue as a simple list where when it is full it must increase size somehow and copy over the old contents.
+```run-python
+import numpy as np
+
+class SimpleQueue:
+    def __init__(self) -> None:
+        self.size = 10
+        self.lst = np.empty(self.size, dtype=np.int64)
+        self.front = 0
+        self.back = 0
+
+    def enqueue(self, v: int) -> None:
+        if self.back < self.size:
+            self.lst[self.back] = v
+            self.back += 1
+
+    def dequeue(self) -> 'int | None':
+        if self.front < self.back:
+            tmp = self.lst[self.front]
+            self.front += 1
+            return tmp
+        return None
+
+    def count(self) -> int:
+        return self.back - self.front
+
+    def empty(self) -> bool:
+        return self.count() == 0
+
+q = SimpleQueue()
+assert q.empty() == True
+
+q.enqueue(1)
+assert q.empty() == False
+assert q.count() == 1
+
+assert q.dequeue() == 1
+assert q.empty() == True
+
+print("All tests pass")
+
+# Test of how bad it is
+q = SimpleQueue()
+q.enqueue(0)
+for i in range(1, 15):
+	q.enqueue(i)
+	q.dequeue()
+
+print(q.count())
+```
+- We run into an issue where we can run into unused space when we use dequeue in this simple implementation.
+- If we increase the size of the backing array we waist a lot of space
+#### Circular Queue
+- The back and front move as we en/dequeue
+- A lot of space could be wasted, so instead we reclaim the space by wrapping around when we hit the end.
+- Example
+	- Queue of size 10, back at 9 front and 7
+	- Do not increase array size
+	- Instead, insert at (9+1) % 10
+		- This inserts back at index 0
+```run-python
+import numpy as np
+
+class SimpleQueue:
+    def __init__(self) -> None:
+        self.size = 10
+        self.lst = np.empty(self.size, dtype=np.int64)
+        self.front = 0
+        self.back = 0
+
+    def enqueue(self, v: int) -> None:
+        if self.count() < self.size:
+            self.lst[self.back] = v
+            self.back = (self.back + 1) % self.size
+
+    def dequeue(self) -> 'int | None':
+        if self.count() > 0:
+            tmp = self.lst[self.front]
+            self.front = (self.front + 1) % self.size
+            return tmp
+        return None
+
+    def count(self) -> int:
+	    if self.back >= self.front:
+	        return self.back - self.front
+	    else:
+		    return self.size - (self.front - self.back)
+
+    def empty(self) -> bool:
+        return self.count() == 0
+
+q = SimpleQueue()
+assert q.empty() == True
+
+q.enqueue(1)
+assert q.empty() == False
+assert q.count() == 1
+
+assert q.dequeue() == 1
+assert q.empty() == True
+
+q = SimpleQueue()
+q.enqueue(0)
+
+gots = []
+for i in range(1, 1001):
+	q.enqueue(i)
+	gots.append(q.dequeue())
+
+assert gots == list(range(1000))
+
+print("All tests pass")
+```
+- This can fill up though, so enqueue should extend when full and copy over the data
+#### Linked Queue
+```run-python
+from dataclasses import dataclass
+
+@dataclass
+class LLNode:
+    val: int
+    nxt: 'LLNode | None' = None
+
+class LinkedQueue:
+    def __init__(self) -> None:
+        self.front = None
+        self.back = None
+        self.cnt = 0
+
+    def count(self) -> int:
+        return self.cnt
+
+    def enqueue(self, v: int) -> None:
+        if self.back is None:
+            self.back = LLNode(v)
+            self.front = self.back
+        else:
+            self.back.nxt = LLNode(v)
+            self.back = self.back.nxt
+        self.cnt += 1
+
+    def dequeue(self) -> 'int | None':
+        if self.front is not None:
+            tmp = self.front.val
+            self.front = self.front.nxt
+            if self.front is None:
+                self.back = None
+            self.cnt -= 1
+            return tmp
+        return None
+
+# Example usage:
+q = LinkedQueue()
+q.enqueue(1)
+q.enqueue(2)
+print(f"Front value after enqueues: {q.front.val}")  # Should be 1
+
+dequeue_val = q.dequeue()
+print(f"Dequeued value: {dequeue_val}")  # Should be 1
+print(f"New front value: {q.front.val}")  # Should be 2 if not None
+print(f"Queue count: {q.count()}")  # Should be 1
+
+```
+
+### Set/Bag
+#### Set
+- A set is an unordered collection of unique elements
+- The main operation is set membership
+	- as well as way to combine sets, e.g., union, intersection, and difference
+- Mutable and immutable
+```run-python
+class LLNode:
+    def __init__(self, val, nxt=None):
+        self.val = val
+        self.nxt = nxt
+
+class LLIterator:
+    def __init__(self, node):
+        self.current = node
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.current is None:
+            raise StopIteration
+        else:
+            val = self.current.val
+            self.current = self.current.nxt
+            return val
+
+class LLSet:
+    def __init__(self):
+        self.lst = None
+
+    def add(self, v):
+        if self.lst is None:
+            self.lst = LLNode(v)
+        else:
+            p, pp = self.lst, None
+            found = False
+            while p is not None:
+                if p.val == v:
+                    found = True
+                    break
+                pp = p
+                p = p.nxt
+            if not found:
+                new_node = LLNode(v)
+                if pp is not None:  # pp is None when list is empty
+                    pp.nxt = new_node
+                else:
+                    self.lst = new_node
+
+    def delete(self, v):
+        if self.lst is not None:
+            if self.lst.val == v:
+                self.lst = self.lst.nxt
+            else:
+                p, pp = self.lst, None
+                while p is not None:
+                    if p.val == v:
+                        if pp is not None:  # If pp is None, it means p is the first node
+                            pp.nxt = p.nxt
+                        return
+                    pp, p = p, p.nxt
+
+    def contains(self, v):
+        p = self.lst
+        while p is not None:
+            if p.val == v:
+                return True
+            p = p.nxt
+        return False
+    
+    def __contains__(self, v):
+        return self.contains(v)
+        
+    def __iter__(self):
+        return LLIterator(self.lst)
+
+# Example usage and iteration over the set
+s = LLSet()
+s.add(1)
+s.add(2)
+s.add(3)
+
+for v in s:
+    print(v)
+```
+#### Bags
+- Checking for duplicates is expensive so a bag is a set that allows for duplicates
+- Insert easier but some other operations more complex like delete which must find all instances
+- If lots of adds expected, this can still save time but at the cost of space

@@ -2,7 +2,7 @@
 
 This repository contains a collection of algorithm implementations, study materials for exams, and notes from lectures. It is organized into several directories.
 
-**Note**: This is a work in progress obviosuly I am doing about 1 lecture per week. There is 8 in total.
+**Note**: This is a work in progress obviously I am doing about 1 lecture per week. There is 8 in total.
 
 ## Directory Structure
 
