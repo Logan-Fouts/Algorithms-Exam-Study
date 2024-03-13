@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notes/Typed Notes/Reading Notes.md",
+                "file": "Notes/Typed Notes/New Lecture Notes.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": false
@@ -70,7 +70,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 281.5
+    "width": 281.5,
+    "collapsed": true
   },
   "right": {
     "id": "e420f9a32d131055",
@@ -86,7 +87,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Notes/Typed Notes/Reading Notes.md",
+                "file": "Notes/Typed Notes/New Lecture Notes.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +104,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Notes/Typed Notes/Reading Notes.md",
+                "file": "Notes/Typed Notes/New Lecture Notes.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +127,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notes/Typed Notes/Reading Notes.md"
+                "file": "Notes/Typed Notes/New Lecture Notes.md"
               }
             }
           }
@@ -135,7 +136,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 337.5
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -150,28 +151,29 @@
   },
   "active": "1cb0938d155b0b1f",
   "lastOpenFiles": [
-    "Notes/Written Notes/Written Notes Batch Lectures 1&2.pdf",
-    "Notes/Typed Notes/New Lecture Notes.md",
-    "Lectures/l3.pdf",
-    "Images/Pasted image 20240312115249.png",
-    "Notes/Typed Notes/Old Lecture Notes.pdf",
+    "Algorithm_Implementations/Lists_Stacks_Queues/linkedlist_backpointer.py",
+    "Algorithm_Implementations/Lists_Stacks_Queues/Lists/simple_singly_linkedlist.py",
+    "Algorithm_Implementations/Lists_Stacks_Queues/Lists/simple_list.py",
+    "Algorithm_Implementations/Lists_Stacks_Queues/Lists/linkedlist_backpointer.py",
+    "Algorithm_Implementations/Lists_Stacks_Queues/Lists",
+    "Algorithm_Implementations/Lists_Stacks_Queues/linkedlist_backpointer.py~",
+    "Algorithm_Implementations/Lists_Stacks_Queues/simple_singly_linkedlist.py~",
+    "Algorithm_Implementations/Lists_Stacks_Queues/simple_singly_linkedlist.py",
+    "Algorithm_Implementations/Lists_Stacks_Queues/simple_list.py~",
+    "Algorithm_Implementations/Lists_Stacks_Queues/simple_list.py",
+    "Algorithm_Implementations/Lists_Stacks_Queues",
     "Notes/Typed Notes/Reading Notes.md",
-    "Documents/School/Algorithms-Exam-Study/Lectures/l3.pdf",
+    "Notes/Typed Notes/New Lecture Notes.md",
+    "Images/Pasted image 20240312115249.png",
     "Documents/School/Algorithms-Exam-Study/Notes/Typed Notes/New Lecture Notes.md",
     "Documents/School/Algorithms-Exam-Study/README.md",
-    "Books/Software Architecture In Practice.pdf",
     "Documents/Personal/Documentation/LeetCode/Leetcode 75 Notes.md",
-    "Documents/School/Software Architecture/Docs/A3 .pdf",
     "Documents/School/Software Architecture/A3 Work.md",
     "Documents/School/Software Architecture/Reading Notes.md",
-    "Documents/School/Software Architecture/Docs/A3 .pdf.crdownload",
     "2390..md",
-    "Documents/School/Software Architecture/Docs/A2.pdf",
     "[2390..md",
-    "Documents/School/Web Programming/B3 Production server with Real-Time Web.pdf",
     "Images/Pasted image 20240227194423.png",
     "Images/Pasted image 20240227193754.png",
-    "Documents/School/Algorithms-Exam-Study/Notes/Written Notes/Written Notes Batch Lectures 1&2.pdf",
     "Images/Pasted image 20240227193557.png",
     "Documents/School/Algorithms-Exam-Study/Notes/Typed Notes/Reading Notes.md",
     "Documents/School/Algorithms-Exam-Study/Images/Pasted image 20240227194423.png",
