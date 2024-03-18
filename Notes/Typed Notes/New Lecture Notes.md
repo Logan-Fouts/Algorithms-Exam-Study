@@ -1059,3 +1059,411 @@ for v in s:
 - Checking for duplicates is expensive so a bag is a set that allows for duplicates
 - Insert easier but some other operations more complex like delete which must find all instances
 - If lots of adds expected, this can still save time but at the cost of space
+## Lecture 4 (Trees) Ch. 4.1-4.6
+- Useful for File/Directory structure
+- HTML/DOM
+- Parse tree
+### Tree ADT
+- A tree is a collection of nodes
+- If not empty then,
+	- it has a root node `r`
+	- and zero or more sub trees that are connected from the root by a directed edge
+- The root of each sub tree is a child of `r`, and `r` is the parent of each sub tree
+- Each sub tree is a tree
+- Node degree means the number of children
+- ![[Pasted image 20240318192358.png]]
+- A node can have an arbitrary number of children
+- Nodes with no children are called leaves
+- Nodes with the same parent are siblings
+### Paths
+- A path from node $n_1$ to node $n_k$ is defined as a sequence of nodes:
+	- $n_1,n_2,...,n_k$
+	- $n_i$ is the parent of $n_{i+1}$ for $i<=i<k$
+- The length of a path is the number of edges it contains
+	- So, the length of $n_1,...,n_k$ is $k-1$
+- The depth of a node, is the length of the path from the root to the node
+- The height of a node is the longest path from the node to a leaf
+	- All leaves have height of 0
+	- The height of the tree is the height of the root
+- If there is a path from $n_i$ to $n_j$ then
+	- $n_i$ is an ancestor of $n_j$
+	- $n_j$ is an descendant of $n_i$
+- If $n_i $\ne$ n_j$ then they are proper, e.g., proper ancestor
+### LCRS Tree
+- Not good to keep references to all children in the node so we can do left most child, right sibling (also known as first child, next sibling)
+- Keep two pointers in each node
+	- left child
+	- right sibling
+- ![[Pasted image 20240318193402.png]]
+- ![[Pasted image 20240318193415.png]]
+#### Implementation
+```python
+from dataclasses  import dataclass
+@dataclass
+class LCRSNode:
+	key: int
+	left: 'LCRSNode|None' = None
+	right: 'LCRSNode|None' = None
+```
+##### Walking the tree
+```python
+from fastcore.basics import patch
+@patch
+def walk(root:LCRSNode) -> None:
+	if root is not None:
+		print(root.key)
+		walk(root.left)
+		walk(root.right)
+```
+##### Adding children
+```python
+@patch
+def add_children(self, key) -> LCRSNode:
+	if self.left is None:
+		self.left = LCRSNode(key)
+		return self.left
+	else:
+		p = self.left
+		while p.right is not None:
+			p = p.right
+		p.right = LCRSNode(key)
+		return p.right
+```
+##### Is a node a leaf?
+```python
+@patch
+def is_leaf(self) -> bool:
+	return self.left is None
+```
+##### Size and Height
+```python
+@patch
+def size(self) -> int:
+	l, r = 0, 0
+	if self.left is not None:
+		l = self.right.size
+	if self.right is not None:
+		r = self.right.size
+	return l + r + 1
+
+def height(self) -> int:
+	h, p = 0, self.left
+	p = self.left
+	while p is not None:
+		h = max(h, 1 + p.height)
+		p = p.right
+	return h
+```
+### Binary Search Trees
+- This is a tree where each node has at most two children
+- We can reason about height:
+	- an average binary tree has height $\theta (\sqrt n)$
+	- a "full" tree has height $\left\lceil \log_2(n) \right\rceil - 1$
+		- That notation means ceiling
+		- ![[Pasted image 20240318195235.png]]
+	- a "degenerate" tree has height $n-1$
+		- Essentially just a linked list
+		- ![[Pasted image 20240318195258.png]]
+#### Implementation
+
+> [!NOTE]
+> This first part is just a binary tree NOT a binary search tree.
+
+```python
+@dataclass
+class BTNode:
+	key: int
+	left: 'BTNode|None' = None
+	right: 'BTNode|None' = None
+```
+##### In order traversal
+```run-python
+from dataclasses import dataclass
+
+@dataclass
+class BTNode:
+    key: int
+    left: 'BTNode | None' = None
+    right: 'BTNode | None' = None
+
+def inorder(r: BTNode):
+    if r is None:
+        return ''
+    else:
+        s = inorder(r.left)
+        s += f' {r.key} '
+        s += inorder(r.right)
+        return s
+
+def preorder(r: BTNode):
+    if r is None:
+        return ''
+    else:
+        s = f' {r.key} '
+        s += preorder(r.left)
+        s += preorder(r.right)
+        return s
+
+def postorder(r: BTNode):
+    if r is None:
+        return ''
+    else:
+        s = postorder(r.left)
+        s += postorder(r.right)
+        s += f' {r.key} '
+        return s
+
+# Constructing a binary tree:
+#        1
+#       / \
+#      2   3
+#     / \
+#    4   5
+
+root = BTNode(1)
+root.left = BTNode(2)
+root.right = BTNode(3)
+root.left.left = BTNode(4)
+root.left.right = BTNode(5)
+
+# Testing the tree traversal functions
+print("Inorder traversal: ", inorder(root).strip())
+print("Preorder traversal: ", preorder(root).strip())
+print("Postorder traversal: ", postorder(root).strip())
+
+```
+#### Binary Search Tree
+##### How do we insert?
+- Put smaller to the left and larger to the right. This is a BST
+- ![[Pasted image 20240318200943.png]]
+```python
+# Note: This wont insert mutliple of the samevalue
+def _add(self, n, key):
+	if n is None:
+		return BTNode(key)
+
+	if n .key > key:
+		n.left = self._add(n.left, key)
+	elif n.key < key:
+		n.right = self._add(n.right, key)
+
+	return n
+```
+##### Check if value exists
+```python
+def _contains_(self, key):
+	return self._contains(self.root, key)
+```
+##### Delete
+- Assume we want to delete 6
+- If the node has one child, we "lift" it
+	- ![[Pasted image 20240318202029.png]]
+- This is harder to do when it has two children
+	- We replace the node with the smallest value in the right sub tree
+	- ![[Pasted image 20240318202122.png]]
+##### Find the smallest node in a sub tree
+```python
+def _min(self, n):
+	if n.left is None:
+		return n.key
+	else:
+		return self._min(n.left)
+```
+##### Recursive Delete
+```python
+def _delete(self, n, key):
+	if n in None:
+		return None
+	if n.key > key:
+		n.left = self._delete(n.left, key)
+	elif n.key < key:
+		n.right = self._delete(n.right, key)
+	else:
+		if n.right is None:
+			return n.left
+		if n.left is None:
+			return n.right
+		n.key = self._min(n.right)
+		n.right = self.delete(n.right, n.key)
+	return n
+```
+##### Height
+```python
+def _height(self, n):
+	if n is None:
+		return -1
+	else:
+		return 1 + max(self._height(n.left), self._height(n.right))
+```
+##### A Balanced Tree?
+- If we are just adding nodes to the tree we can see that we are much closer to the best case rather than the worst case for height.
+	- ![[Pasted image 20240318202731.png]]
+- When we add in delete we can see that the height gets worse.
+	- ![[Pasted image 20240318202800.png]]
+##### Operations
+- The cost of all operations depends on the height of the tree
+- For balanced trees, all operations are $O(log(n)$
+- For degenerate trees, all operations are $O(n)$
+- We know that average trees are rarely balanced or degenerate
+- If we allow deletes, an average tree has height $O(\sqrt(n)$j
+### AVL-Trees
+- Adelson-Velskii and Landis
+- This is a binary search tree with a balance condition
+#### Balance Condition
+- This ensures that the depth of the tree is $O(logN)$
+- Must be easy to maintain
+- First idea, the left and right sub trees should be the same height
+	- This can result in poorly balanced trees
+	- ![[Pasted image 20240318203427.png]]
+- Balance at the root is not enough so each node should have left and right sub trees of the same height + or - 1
+#### AVL-Trees
+- The height of the left and right sub trees can differ at most 1
+- Gives a height of about $1.44*log_2(N+2)-1.328$
+	- This is more than $log_2$, but not that much
+- Minimum nodes at a height are:
+	- $S(h)=S(h-1)+s(h-2)+1$
+	- So a tree with height 9 has at least 143 nodes
+- ![[Pasted image 20240318203950.png]]
+##### Implementation
+- Inserting can destroy balance so, insert must make sure the tree remains balanced after insert
+- There are four possible cases: insert into left (L) sub tree of left (L) child, LR, RL, and RR
+	- Two are symmetric: LL and RR, and LR and RL
+	- And one pair is easier, LL and RR
+###### Single rotation (LL and RR)
+- ![[Pasted image 20240318204236.png]]
+- What is going on?
+	- Node $k_2$ (the root) is violating the balance condition
+		- since X is two levels deeper than Z
+		- A change to X caused the violation
+	- We can fix this by moving X higher and Y and Z lower
+	- Single rotation
+		- This means $k_1$ becomes root
+		- and $k_2$ its right child, since $k_1<k_2$
+		- Y becomes the left child of $k_2$ since $k_1<Y<k_2$
+		- ![[Pasted image 20240318204956.png]]
+		- ![[Pasted image 20240318205138.png]]
+	- Double rotation
+		- Previously, we have seen LL and RR
+		- For RL and LR we need to rotate twice
+			- for RL, "double right"
+			- Double right means
+				- rotate right child left
+				- rotate self right
+			- ![[Pasted image 20240318205542.png]]
+##### AVL Implementation
+```python
+@dataclass
+class AVLNode:
+	key: int
+	left: 'AVLNode|None' = None
+	right: 'AVLNode|None' = None
+	height: int = 0
+
+class AVLTree:
+	def __init__(self):
+		self.root = None
+
+	def _height(self, n):
+		if n is None:
+			return -1
+		return n.height
+
+	def _add(self, n, key):
+		if n is None:
+			return AVLNode(key)
+
+		if n.key > key:
+			n.left = self._add(n.left, key)
+		elif n.key < key:
+			n.right = self._add(n.right, key)
+		return self._balance(n)
+
+	def _delete(self, n, key):
+		if n is None:
+			return None
+
+		if n.key > key:
+			n.left = self._delete(n.left, key)
+		elif n.key < key:
+			n.right = self._delete(n.right, key)
+		else:
+			if n.right is None:
+				return n.left
+			if n.left is None:
+				return n.right
+			n.key = self._min(n.right)
+			n.right = self._delete(n.right, n.key)
+
+		return self._balance(n)
+
+	def _rotate_left(self, r2):
+		r1 = r2.left
+		r2.left = r1.right
+		r1.right = r2
+		r2.height = max(self._height(r2.left), self._height(r2.right)) + 1
+		r1.height = max(self._height(r1.left), r2.height) + 1
+
+		return r1
+
+	def _rotate_right(self, r2):
+		r1 = r2.right
+		r2.right = r1.left
+		r1.left = r2
+		r2.height = max(self._height(r2.left), self._height(r2.right)) + 1
+		r1.height = max(self._height(r1.left), r2.height) + 1
+
+		return r1
+
+	def _double_right(self, n):
+		n.right = self._rotate_left(n.right)
+		return self._rotate_right(n)
+
+	def _double_left(self, n):
+		n.left = self._rotate_right(n.left)
+		return self._rotate_left(n)
+
+	def _balance(self, n):
+		if n is None:
+			return n
+
+		if self._height(n.left) - self._height(n.right) > 1:
+			if self._height(n.left.left) >= self._height(n.left.right):
+				n = self._rotate_left(n)
+			else:
+				n = self._double_left(n)
+		elif self._height(n.right) - self._height(n.left) > 1:
+			if self._height(n.right.right) >= self._height(n.right.left):
+				n = self._rotate_right(n)
+			else:
+		AVL		n = self._double_right(n)
+
+		n.height = max(self._height(n.left), self._height(n.right)) + 1
+		return n
+```
+- With this a tree with 1023 nodes should have a height of about 13
+	- $1.44*log_21023-1.1328$
+- Running a 100,000 inserts, we find that the height is between 10 to 12
+	- mean is 11.000310, so very close to 11
+	- Compared to a mean of 33.5 with binary search trees and no balancing effort
+- The above is **with** deletes
+- ![[Pasted image 20240318211856.png]]
+### Splay-Trees
+- Many applications have data locality
+	- A node is accessed multiple times withing a reasonable time frame
+- Splay trees push a node to the root after it is accessed
+- Uses a series of rotations from AVL trees
+- Can also help balance the tree
+- Amortized Cost
+	- Splay trees guarantees that m consecutive operations is $O(,log_2n)$
+	- A single operation can still be $\theta(n)$, so the bound is not $O(log_2n)$
+	- This is called amortized running time
+		- if m operations are $O(m*f(n))$
+		- the amortized cost is $O(f(n))$
+- If an operation is $O(n)$ and we want $O(log_2n)$ it is clear that we must do something to fix it
+	- In splay trees, we fix by moving
+	- So, if first $O(n)$, then consecutive close to $O(1)$
+	- ![[Pasted image 20240318212603.png]]
+	- ![[Pasted image 20240318212612.png]]
+	- We can move any node to the root by combining zig, zig-zig, and zig-zag
+	- We do this each time we search for a node
+	- This will ensure that nodes that we have searched for will be closer to the root and be quicker to find again.
