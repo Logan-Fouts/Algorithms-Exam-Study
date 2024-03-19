@@ -1305,7 +1305,7 @@ def _height(self, n):
 - For balanced trees, all operations are $O(log(n)$
 - For degenerate trees, all operations are $O(n)$
 - We know that average trees are rarely balanced or degenerate
-- If we allow deletes, an average tree has height $O(\sqrt(n)$j
+- If we allow deletes, an average tree has height $O(\sqrt(n)$
 ### AVL-Trees
 - Adelson-Velskii and Landis
 - This is a binary search tree with a balance condition
@@ -1441,7 +1441,7 @@ class AVLTree:
 		return n
 ```
 - With this a tree with 1023 nodes should have a height of about 13
-	- $1.44*log_21023-1.1328$
+	- $1.44*log_21023-1.328$
 - Running a 100,000 inserts, we find that the height is between 10 to 12
 	- mean is 11.000310, so very close to 11
 	- Compared to a mean of 33.5 with binary search trees and no balancing effort
@@ -1454,7 +1454,7 @@ class AVLTree:
 - Uses a series of rotations from AVL trees
 - Can also help balance the tree
 - Amortized Cost
-	- Splay trees guarantees that m consecutive operations is $O(,log_2n)$
+	- Splay trees guarantees that m consecutive operations is $O(mlog_2n)$
 	- A single operation can still be $\theta(n)$, so the bound is not $O(log_2n)$
 	- This is called amortized running time
 		- if m operations are $O(m*f(n))$
