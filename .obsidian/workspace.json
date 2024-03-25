@@ -11,39 +11,12 @@
             "id": "6e92c613256c1ba7",
             "type": "leaf",
             "state": {
-              "type": "pdf",
-              "state": {
-                "file": "Notes/Typed Notes/Old Lecture Notes.pdf"
-              }
-            }
-          },
-          {
-            "id": "9cfb8e8c7121a362",
-            "type": "leaf",
-            "state": {
               "type": "markdown",
               "state": {
                 "file": "Notes/Typed Notes/New Lecture Notes.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": false
-              }
-            }
-          }
-        ],
-        "currentTab": 1
-      },
-      {
-        "id": "c9bad84c41cef8c7",
-        "type": "tabs",
-        "children": [
-          {
-            "id": "d12b6188cab9ac46",
-            "type": "leaf",
-            "state": {
-              "type": "pdf",
-              "state": {
-                "file": "Lectures/l4.pdf"
               }
             }
           }
@@ -162,8 +135,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200,
-    "collapsed": true
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -176,31 +148,31 @@
       "audio-recorder:Start/stop recording": false
     }
   },
-  "active": "9cfb8e8c7121a362",
+  "active": "6e92c613256c1ba7",
   "lastOpenFiles": [
-    "Notes/Written Notes/Written Notes Batch Lectures 1&2.pdf",
+    "Pasted image 20240325210908.png",
+    "Notes/Typed Notes/Old Lecture Notes.pdf",
+    "Notes/Typed Notes/Reading Notes.md",
     "Notes/Written Notes/Written Notes Batch Lecture 4.pdf",
+    "Images/Pasted image 20240325200044.png",
+    "Notes/Typed Notes/New Lecture Notes.md",
+    "Images/Pasted image 20240325202828.png",
+    "Images/Pasted image 20240325202810.png",
+    "Images/Pasted image 20240325202731.png",
+    "Images/Pasted image 20240325202233.png",
+    "Images/Pasted image 20240325200957.png",
+    "Images/Pasted image 20240325200443.png",
+    "Images/Pasted image 20240325200405.png",
+    "Notes/Written Notes/Written Notes Batch Lectures 1&2.pdf",
     "Notes/Written Notes Batch Lecture 4.pdf",
     "Written Notes Batch Lecture 4.pdf",
-    "Notes/Typed Notes/Reading Notes.md",
     "Lectures/l4.pdf",
-    "Notes/Typed Notes/New Lecture Notes.md",
-    "Notes/Typed Notes/Old Lecture Notes.pdf",
     "Lectures/l5.pdf",
     "Images/Pasted image 20240318192344.png",
     "Lectures/l3.pdf",
     "Lectures/l2.pdf",
     "Lectures/l1.pdf",
     "Images/Pasted image 20240318212612.png",
-    "Images/Pasted image 20240318212603.png",
-    "Images/Pasted image 20240318211856.png",
-    "Images/Pasted image 20240318205542.png",
-    "Images/Pasted image 20240318205138.png",
-    "Images/Pasted image 20240318204956.png",
-    "Images/Pasted image 20240318204940.png",
-    "Images/Pasted image 20240318204804.png",
-    "Images/Pasted image 20240318204754.png",
-    "Lectures/l8.pdf",
     "Documents/School/Algorithms-Exam-Study/Notes/Typed Notes/New Lecture Notes.md",
     "Documents/School/Algorithms-Exam-Study/README.md",
     "Documents/Personal/Documentation/LeetCode/Leetcode 75 Notes.md",

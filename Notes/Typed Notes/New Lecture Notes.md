@@ -1467,3 +1467,98 @@ class AVLTree:
 	- We can move any node to the root by combining zig, zig-zig, and zig-zag
 	- We do this each time we search for a node
 	- This will ensure that nodes that we have searched for will be closer to the root and be quicker to find again.
+### Red Black Trees- Another balanced BST so max height $O(log n)$
+The idea is to maintain balance by rotating larger sub trees up and smaller sub trees down
+- Root and nil are black
+- Nodes are either red or black
+- If a node is red then its children are black
+- All paths from a  node to its NIL descendants contain the same number of black nodes
+- ![[Pasted image 20240325200044.png]]
+- Rotations may have to happen when insert of remove a node
+#### Rotations
+##### Left
+![[Pasted image 20240325200405.png]]
+##### Right
+![[Pasted image 20240325200443.png]]
+#### Insertions
+Watch [this](https://www.youtube.com/watch?v=A3JZinzkMpk)
+
+When we insert we first start by coloring the node red.
+As we fix violations it can move up the tree. We keep fixing the issues until all is fixed.
+
+4 scenarios
+1. Z = root
+2. Z.uncle = red
+3. Z.uncle = black (triangle)
+4. Z.uncle = black (line)
+
+##### Z = Root
+Simply color the node Z black
+##### Z.uncle = red
+Recolor
+- **Note:** B is not the root this whole tree is just a sub tree of a larger one.
+![[Pasted image 20240325200957.png]]
+##### Z.uncle = black (Triangle)
+- **Note:** can be triangle in the other direction
+![[Pasted image 20240325202233.png]]
+##### Z.uncle = black (Line)
+- **Note:** can be line in the other direction
+![[Pasted image 20240325202731.png]]
+![[Pasted image 20240325202810.png]]
+![[Pasted image 20240325202828.png]]
+#### Deletions
+Just watch [this](https://www.youtube.com/watch?v=lU99loSvD8s)
+1. Transplant (helps to move sub trees within the tree)
+	- u is the node to delete and v is either the left or right child of u.
+	- Three situations:
+		1. u is the root
+			1. Set the root to v
+		2. u is the left child
+			1. Set u parent left child to be v
+			2. Set v parent to u parent
+		3. u is the right child
+			1. Set u parent left child to be v
+			2. Set v parent to u parent
+2. Delete (deletes the node)
+	- z is the node we want to delete 
+	- Three situations:
+		1. left child is NIL
+			1. Note z's original color
+			2. Label z's right child x and then call `transplant(z, x)`
+			3. Call `delete_fixup(x)`
+		2. right child is NIL
+			1. Note z's original color
+			2. Label z's right child x and then call `transplant(z, x)`
+			3. Call `delete_fixup(x)`
+		3. neither is NIL
+			1. Find minimum in z's right sub tree and label it y as well as note its original color
+			2. Label y's right child as x
+			3. Call `transplant(y, x)`
+			4. Set y right child to z's right child as well as z's right child parent set to y
+			5. Call `transplant(z, y)`
+			6. Call `delete_fixup(x)`
+3. [Delete Fix Up](https://www.youtube.com/watch?v=iw8N1_keEWA) (fixes any red black violations)
+	- x's sibling is w
+	- **Note:** We may do multiple of this situation fixes in one call to this function
+	- Four situations:
+		1. w is red
+			1. Set w color to black
+			2. Set x's parent to red
+			3. Call `left_rotate(x.p)`
+			4. Set w to be x's parent's right child
+		2. w is black, and w.left & w.right are black
+			1. Set w to red
+			2. Change x to its parent
+		3. w is black, w.left is red and w.right is black
+			1. Set w left to black
+			2. Set w to red
+			3. Call `right_rotate(w)`
+			4. Set w to x's parent's right child
+		4. w is black, and w.right is red
+			1. Set w color to x's parent color
+			2. Set x's parent color to black
+			3. Set w's right child color to black
+			4. Call `left_rotate(x.p)`
+			5. Set x to be the root
+	- At the very end of all we set x to be black
+		- ![[Pasted image 20240325210908.png]]
